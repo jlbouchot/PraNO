@@ -21,7 +21,7 @@ What can I see here?
 Non-ordered list of algorithms which are (will be?) covered here, with their current development status. 
 The novice reader is strongly advised to look at the Introductory page to get some familiarity with the topics covered. 
 Once enough algorithms are described, this list will be updated to reflect what I believe is an increasing sequence in complexity - This being an absolutely subjective measure, some people's opinions may diverge. 
-Note that this is not an non-overlapping set of the world of numerical optimization (for instance, LM algo is *A* nonlinear least squares, Dogleg is *A* trust-region approach, etc ... )
+Note that this is not an non-overlapping set of the world of numerical optimization (for instance, LM algo is **A** nonlinear least squares, Dogleg is **A** trust-region approach, etc ... )
 * Gradient descent (Not done)
 * Conjugate gradient (Not done)
 * (Banach) Fixed-point iteration -- the simple case (Not done)
@@ -62,7 +62,7 @@ Some applications
 Some readings of interest
 -------------------------
 
-* Nocedal, Wright, __Numerical Optimization__, Springer, 2006. 
-* Hastie, Tibshirani, Wainwright, __Statistical learning with sparsity: The Lasso and generalizations__, Chapman & Hall, 2015. 
-* Boyd, Vandenberghe, __Convex optimization__. Cambridge University Press, 2004.
+* Nocedal, Wright, _Numerical Optimization_, Springer, 2006. 
+* Hastie, Tibshirani, Wainwright, _Statistical learning with sparsity: The Lasso and generalizations_, Chapman & Hall, 2015. 
+* Boyd, Vandenberghe, _Convex optimization_. Cambridge University Press, 2004.
 
