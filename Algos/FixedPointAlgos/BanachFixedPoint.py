@@ -25,14 +25,14 @@ class FPAlgo(FPA):
         self.x0 = x0 
         self.d = 1 if type(x0) == float else len(x0)
         super().__init__(anOperator)
-        self.iterates.append(x0)
+        self.estimates.append(x0)
 
 
     def solve(self): 
         xOld = self.x0
         for oneiter in range(0,self.nbIter) : 
             xNew = self.lhs(xOld)
-            self.iterates.append(xNew)
+            self.estimates.append(xNew)
             xOld = xNew
 
         return xNew

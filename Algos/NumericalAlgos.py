@@ -15,7 +15,7 @@ class NumericalAlgos():
     """Generic class for a numerical solver."""
     def __init__(self, anOperator): 
         self.lhs = anOperator
-        self.iterates = [] # This will contain the various estimations, in case of iterative algorithms
+        self.estimates = [] # This will contain the various estimations, in case of iterative algorithms
 
     def solve(self):
         return self.solve()
