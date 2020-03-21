@@ -11,7 +11,7 @@ __status__ = "Development"
 __lastmodified__ = "2020/03/19"
 __created__ = "2020/03/19"
 
-class NumericalSolver:
+class NumericalAlgos():
     """Generic class for a numerical solver."""
     def __init__(self, anOperator): 
         self.lhs = anOperator
