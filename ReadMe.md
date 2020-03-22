@@ -42,6 +42,7 @@ Note that this is not an non-overlapping set of the world of numerical optimizat
 * Gauss-Newton (Not done)
 * (Projected) Landweber (Not done)
 * POCS -- Projection On Convex Sets (Not done)
+* (Block) coordinate descent
 
 
 Some maths that may be required in at least more than one algorithm
