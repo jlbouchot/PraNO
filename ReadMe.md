@@ -24,7 +24,7 @@ Once enough algorithms are described, this list will be updated to reflect what 
 Note that this is not an non-overlapping set of the world of numerical optimization (for instance, LM algo is **A** nonlinear least squares, Dogleg is **A** trust-region approach, etc ... )
 * Gradient descent (Not done)
 * Conjugate gradient (Not done)
-* (Banach) Fixed-point iteration -- the simple case (Not done)
+* [(Banach) Fixed-point iteration -- the simple case](./FPA/FixedPointTheory.ipynb)
 * Lasso (Not done)
 * Elastic-net (Not done)
 * Simplex method (Not done)
