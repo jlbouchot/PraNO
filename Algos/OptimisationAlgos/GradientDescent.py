@@ -72,7 +72,9 @@ class ArmijoGoldsteinGD(GradientDescentAlgos):
             curInnerIter = 0
             curStepSize = self.c*self.stepSize[oneiter] # This will change with time
             xNew = xOld - curStepSize*curGradient
-            while (self.lhs(xNew) > self.errors[oneiter] or curInnerIter < self.innerIterMax): 
+            while (self.lhs(xNew) > self.errors[oneiter] and curInnerIter < self.innerIterMax): 
+                # You may uncomment the following line to check if indeed you pass in this loop!
+                # print("I'm in outer loop number " + str(oneiter) + " and inside the inner loop number " + str(curInnerIter))
                 curStepSize = curStepSize/2
                 xNew = xOld - curStepSize*curGradient
                 curInnerIter = curInnerIter +1 
