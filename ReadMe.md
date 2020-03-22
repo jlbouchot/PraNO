@@ -43,6 +43,7 @@ Note that this is not an non-overlapping set of the world of numerical optimizat
 * (Projected) Landweber (Not done)
 * POCS -- Projection On Convex Sets (Not done)
 * (Block) coordinate descent
+* Stochastic gradient descent
 
 
 Some maths that may be required in at least more than one algorithm
