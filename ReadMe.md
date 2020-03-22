@@ -44,6 +44,7 @@ Note that this is not an non-overlapping set of the world of numerical optimizat
 * POCS -- Projection On Convex Sets (Not done)
 * (Block) coordinate descent
 * Stochastic gradient descent
+* Gradient descent with momentum
 
 
 Some maths that may be required in at least more than one algorithm
