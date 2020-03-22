@@ -42,9 +42,9 @@ Note that this is not an non-overlapping set of the world of numerical optimizat
 * Gauss-Newton (Not done)
 * (Projected) Landweber (Not done)
 * POCS -- Projection On Convex Sets (Not done)
-* (Block) coordinate descent
-* Stochastic gradient descent
-* Gradient descent with momentum
+* (Block) coordinate descent (Not done)
+* Stochastic gradient descent (Not done)
+* Gradient descent with momentum (Not done)
 
 
 Some maths that may be required in at least more than one algorithm
