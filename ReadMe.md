@@ -45,7 +45,7 @@ Note that this is not an non-overlapping set of the world of numerical optimizat
 * (Block) coordinate descent (Not done)
 * Stochastic gradient descent (Not done)
 * Gradient descent with momentum (Not done)
-
+* Some remarks on Multi-objective optimization (Not done)
 
 Some maths that may be required in at least more than one algorithm
 * Global overview of convex optimization 
