@@ -36,7 +36,7 @@ class FPAlgo(FPA):
             self.estimates.append(xNew)
             xOld = xNew
 
-        self.xtar = xnew
+        self.xstar = xNew
 
         return xNew
 

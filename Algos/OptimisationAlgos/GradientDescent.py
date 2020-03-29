@@ -41,7 +41,7 @@ class VanillaGD(GradientDescentAlgos):
             self.estimates.append(xNew)
             xOld = xNew
 
-        self.xstar = xnew
+        self.xstar = xNew
 
         return xNew
 
@@ -91,7 +91,7 @@ class ArmijoGoldsteinGD(GradientDescentAlgos):
             self.estimates.append(xNew)
             xOld = xNew
 
-        xstar = xnew
+        self.xstar = xNew
 
         return xNew
 
