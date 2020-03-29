@@ -11,7 +11,7 @@ __maintainer__ = "Jean-Luc Bouchot"
 __email__ = "jlbouchot@gmail.com"
 __status__ = "Development"
 __lastmodified__ = "2020/03/22"
-__created__ = "2020/03/22"
+__created__ = "2020/03/29"
 
 class VanillaGD(GradientDescentAlgos):
     """Implementation of the classical/vanilla gradient descent."""
@@ -29,6 +29,7 @@ class VanillaGD(GradientDescentAlgos):
         self.estimates.append(x0)
         self.errors = np.zeros(nbIter+1)
         self.errors[0] = anOperator(x0)
+        self.algoName = "Vanilla Gradient Descent"
 
 
     def solve(self): 
@@ -39,6 +40,8 @@ class VanillaGD(GradientDescentAlgos):
             self.errors[oneiter+1] = self.lhs(xNew)
             self.estimates.append(xNew)
             xOld = xNew
+
+        self.xstar = xnew
 
         return xNew
 
@@ -60,6 +63,8 @@ class ArmijoGoldsteinGD(GradientDescentAlgos):
         self.estimates.append(x0)
         self.errors = np.zeros(nbIter+1)
         self.errors[0] = anOperator(x0)
+
+        self.algoName = "GD Arkijo-Goldstein line search"
 
         self.innerIterMax = 20
 
@@ -85,6 +90,8 @@ class ArmijoGoldsteinGD(GradientDescentAlgos):
             self.errors[oneiter+1] = self.lhs(xNew)
             self.estimates.append(xNew)
             xOld = xNew
+
+        xstar = xnew
 
         return xNew
 

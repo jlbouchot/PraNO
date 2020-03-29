@@ -9,13 +9,17 @@ __maintainer__ = "Jean-Luc Bouchot"
 __email__ = "jlbouchot@gmail.com"
 __status__ = "Development"
 __lastmodified__ = "2020/03/19"
-__created__ = "2020/03/19"
+__created__ = "2020/03/29"
 
 class NumericalAlgos():
     """Generic class for a numerical solver."""
     def __init__(self, anOperator): 
         self.lhs = anOperator
         self.estimates = [] # This will contain the various estimations, in case of iterative algorithms
+        self.xstar = None
+
+    def print(self): 
+        print("Results from {} is {}.".format(self.algoName, self.xstar))
 
     def solve(self):
         return self.solve()

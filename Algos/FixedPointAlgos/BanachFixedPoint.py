@@ -11,7 +11,7 @@ __maintainer__ = "Jean-Luc Bouchot"
 __email__ = "jlbouchot@gmail.com"
 __status__ = "Development"
 __lastmodified__ = "2020/03/19"
-__created__ = "2020/03/19"
+__created__ = "2020/03/29"
 
 class FPAlgo(FPA):
     """Implementation of the classical fixed point algorithm."""
@@ -26,6 +26,7 @@ class FPAlgo(FPA):
         self.d = 1 if type(x0) == float else len(x0)
         super().__init__(anOperator)
         self.estimates.append(x0)
+        self.algoName = "Fixed point iterations"
 
 
     def solve(self): 
@@ -34,6 +35,8 @@ class FPAlgo(FPA):
             xNew = self.lhs(xOld)
             self.estimates.append(xNew)
             xOld = xNew
+
+        self.xtar = xnew
 
         return xNew
 
