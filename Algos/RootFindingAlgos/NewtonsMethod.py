@@ -45,3 +45,40 @@ class NewtonsIterations1D(RootFindingAlgos):
         self.xstar = xNew
 
         return xNew
+
+class NewtonsIterationsOverdetermined(RootFindingAlgos): 
+    """Implementation of the classical/vanilla Newton iterations in 1 D."""
+
+
+    # For an efficient vanilla implementation, we need the jacobian to be specified 
+    # Ideally, one would return an error or, at the very least, a warning in case the derivative gets closer to 0
+    def __init__(self, anOperator, x0, aJacobian, nbIter): 
+        self.nbIter = nbIter
+        self.d = len(x0)
+        super().__init__(anOperator, x0)
+
+        self.J = aJacobian
+
+        self.estimates = np.zeros([self.d,nbIter+1])
+        self.estimates[:,0] = x0
+        self.errors = np.zeros(nbIter+1)
+        curValue = anOperator(x0)
+        self.errors = 100000*np.ones([len(curValue),nbIter+1])
+        self.errors[:,0] = curValue
+
+        self.algoName = "Newton method overdetermined"
+
+
+    def solve(self): 
+        xOld = self.x0
+
+        for oneiter in range(0,self.nbIter) : 
+            curGradient = self.J(xOld)
+            xNew = xOld - np.dot(np.linalg.pinv(curGradient),self.errors[:,oneiter])
+            self.errors[:,oneiter+1] = self.lhs(xNew)
+            self.estimates[:,oneiter+1] = xNew
+            xOld = xNew
+
+        self.xstar = xNew
+
+        return xNew
