@@ -52,6 +52,7 @@ Some maths that may be required in at least more than one algorithm
 * KKT conditions 
 * Augmented Lagrangian 
 * Proximal operators, Moreau envelope, Moreau decomposition
+* Wolfe conditions
 
 Some applications
 -----------------
