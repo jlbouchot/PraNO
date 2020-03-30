@@ -18,9 +18,11 @@ class RootFindingAlgos(NumericalAlgos):
 
     algoType = "Root finding algorithm"
 
-    def __init__(self, anOperator, x0): 
+    def __init__(self, anOperator, x0, nbIter): 
         super().__init__(anOperator)
         self.x0 = x0
-
-
+        self.d = 1 if type(x0) == float else len(x0)
+        self.estimates = np.zeros([self.d,nbIter+1])
+        self.nbIter = nbIter
+        self.estimates[:,0] = x0
 

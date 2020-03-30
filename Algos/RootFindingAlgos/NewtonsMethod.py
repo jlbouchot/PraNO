@@ -20,15 +20,15 @@ class NewtonsIterations1D(RootFindingAlgos):
     # For an efficient vanilla implementation, we need the jacobian to be specified 
     # Ideally, one would return an error or, at the very least, a warning in case the derivative gets closer to 0
     def __init__(self, anOperator, x0, aJacobian, nbIter): 
-        self.nbIter = nbIter
-        self.d = 1
-        super().__init__(anOperator, x0)
+        # self.nbIter = nbIter
+        #self.d = 1
+        super().__init__(anOperator, x0, nbIter)
 
         self.J = aJacobian
 
-        self.estimates.append(x0)
-        self.errors = np.zeros(nbIter+1)
-        self.errors[0] = anOperator(x0)
+        #self.estimates.append(x0)
+        self.errors = np.zeros([self.d, nbIter+1])
+        self.errors[:,0] = anOperator(x0)
 
         self.algoName = "Newton method 1D"
 
@@ -37,9 +37,9 @@ class NewtonsIterations1D(RootFindingAlgos):
         xOld = self.x0
         for oneiter in range(0,self.nbIter) : 
             curGradient = self.J(xOld)
-            xNew = xOld - self.errors[oneiter]/curGradient
-            self.errors[oneiter+1] = self.lhs(xNew)
-            self.estimates.append(xNew)
+            xNew = xOld - self.errors[:,oneiter]/curGradient
+            self.errors[:,oneiter+1] = self.lhs(xNew)
+            self.estimates[:,oneiter+1] = xNew
             xOld = xNew
 
         self.xstar = xNew
@@ -53,14 +53,10 @@ class NewtonsIterationsOverdetermined(RootFindingAlgos):
     # For an efficient vanilla implementation, we need the jacobian to be specified 
     # Ideally, one would return an error or, at the very least, a warning in case the derivative gets closer to 0
     def __init__(self, anOperator, x0, aJacobian, nbIter): 
-        self.nbIter = nbIter
-        self.d = len(x0)
-        super().__init__(anOperator, x0)
+        super().__init__(anOperator, x0, nbIter)
 
         self.J = aJacobian
 
-        self.estimates = np.zeros([self.d,nbIter+1])
-        self.estimates[:,0] = x0
         self.errors = np.zeros(nbIter+1)
         curValue = anOperator(x0)
         self.errors = 100000*np.ones([len(curValue),nbIter+1])
