@@ -1,6 +1,6 @@
 import numpy as np
 
-from Algos.NumericalAlgos.LinearSystems import LinearSystems
+from Algos.LinearSystems.LinearSystems import LinearSystems
 
 __author__ = ["Jean-Luc Bouchot"]
 __copyright__ = "Jean-Luc Bouchot"
