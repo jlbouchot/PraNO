@@ -26,13 +26,13 @@ class IterativeSolver(LinearSystems):
 
         
 
-    def solve_triangle(self, A, b): 
+    def solve_triangle(self, b): 
         xOut = np.zeros([self.d])
         for i in range(0,self.d): 
             minusPart = 0
-            for j in range(0,i-1): 
-                minusPart = minusPart + A[i,j]*xOut[j]
-            xOut[i] = 1.0/A[i,i]*(b[i] - minusPart)
+            for j in range(0,i): 
+                minusPart = minusPart + self.matLHS[i,j]*xOut[j]
+            xOut[i] = 1.0/self.matLHS[i,i]*(b[i] - minusPart)
 
         return xOut
 
@@ -57,6 +57,27 @@ class JacobiSolver(IterativeSolver):
         for oneiter in range(0,self.nbIter): 
             curRHS = self.b - np.matmul(self.matRHS,self.estimates[:,oneiter])
             xNew = self.solve_diagonal(curRHS)
+            self.estimates[:,oneiter+1] = xNew
+            self.errors[oneiter+1] = np.linalg.norm(np.matmul(self.A,xNew) - self.b)
+
+        self.xStar = xNew
+
+class GaussSeidelSolver(IterativeSolver): 
+
+    def __init__(self, A, x0, rhs, nbIter):
+        super().__init__(A, x0, rhs, nbIter)
+        self.matLHS = np.zeros([self.d,self.d])
+        for i in range(0,self.d): 
+            for j in range(0,i+1): 
+                self.matLHS[i,j] = self.A[i,j]
+        self.matRHS = self.A - self.matLHS
+        
+        
+    def solve(self): 
+        
+        for oneiter in range(0,self.nbIter): 
+            curRHS = self.b - np.matmul(self.matRHS,self.estimates[:,oneiter])
+            xNew = self.solve_triangle(curRHS)
             self.estimates[:,oneiter+1] = xNew
             self.errors[oneiter+1] = np.linalg.norm(np.matmul(self.A,xNew) - self.b)
 
