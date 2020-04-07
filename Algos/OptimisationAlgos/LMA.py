@@ -10,14 +10,16 @@ __version__ = "0.1.0-dev"
 __maintainer__ = "Jean-Luc Bouchot"
 __email__ = "jlbmathit@gmail.com"
 __status__ = "Development"
-__lastmodified__ = "2020/04/06"
 __created__ = "2020/04/06"
+__lastmodified__ = "2020/04/07"
 
 class VanillaLM(NumericalAlgos): 
     '''Basic Levenberg-Marquardt algorithm without any extra feature''' 
 
     def __init__(self, anOperator, x0, aJacobian, aHessian, nbIter, omega0):  
-        super().__init__(anOperator, x0)
+        super().__init__(anOperator)
+
+        self.x0 = x0
         self.nbIter = nbIter 
 
         self.J = aJacobian
@@ -27,10 +29,13 @@ class VanillaLM(NumericalAlgos):
 
         self.algoName = "Vanilla LM optimisation"
 
-        curValue = self.J(x0)
+        curValue = self.lhs(x0)
 
-        self.errors = 100000*np.ones([len(curValue),nbIter+1])
-        self.errors[:,0] = curValue
+        self.estimates = np.zeros([self.d,nbIter+1])
+        self.estimates[:,0] = x0
+
+        self.errors = 100000*np.ones([nbIter+1])
+        self.errors[0] = curValue
 
         self.omegas = np.zeros([nbIter+1])
         self.omegas[0] = omega0
@@ -39,14 +44,14 @@ class VanillaLM(NumericalAlgos):
         xOld = self.x0
         for oneiter in range(0,self.nbIter) : 
             curGradient = self.J(xOld)
-            xNew = xOld - np.dot(np.linalg.pinv(self.H(xOld) + self.omegas[nbIter]*np.identity(self.d)),curGradient)
+            xNew = xOld - np.dot(np.linalg.pinv(self.H(xOld) + self.omegas[oneiter]*np.identity(self.d)),curGradient)
 
-            self.errors[:,oneiter+1] = self.lhs(xNew)
-            if self.errors[:,oneiter+1] < self.errors[:,oneiter]:
-                self.omegas[nbIter+1] = self.omegas[nbIter+1]/5
+            self.errors[oneiter+1] = self.lhs(xNew)
+            if self.errors[oneiter+1] < self.errors[oneiter]:
+                self.omegas[oneiter+1] = self.omegas[oneiter+1]/5
                 self.estimates[:,oneiter+1] = xOld
             else :
-                self.omegas[nbIter+1] = self.omegas[nbIter+1]*5
+                self.omegas[oneiter+1] = self.omegas[oneiter+1]*5
                 self.estimates[:,oneiter+1] = xNew
                 xOld = xNew
 
