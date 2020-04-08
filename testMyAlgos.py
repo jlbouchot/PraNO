@@ -8,6 +8,7 @@ from Algos.LinearSystems.IterativeAlgos import JacobiSolver as LinearJacobi
 from Algos.LinearSystems.IterativeAlgos import GaussSeidelSolver as GSSolver
 from Algos.OptimisationAlgos.LMA import VanillaLM as VanillaLM
 from Algos.OptimisationAlgos.LMA import ClassicalLM as ClassicalLM
+from Algos.OptimisationAlgos.LMA import SndOrderLM as SndOrderLM
 
 
 import numpy as np 
@@ -243,3 +244,36 @@ omega0 = 10
 myClassicalLM = ClassicalLM(lambda x: residualFunction(x, ts, ys), x0, lambda x: jacobianOfTarget(x,ts), nbIter, omega0)
 myClassicalLM.solve()
 myClassicalLM.print()
+
+
+##########################################
+## Tests for parameter estimations in LM in which the diagonal matrices are lifted with a non identity diagonal matrix
+##########################################
+# Target function is defined f(t) = x1 +tx2 + t^2x3 + x4e^{-tx5}
+def targetBloodDecay(params, samplingPts): 
+    return np.array([params[0] + t*params[1] + t**2*params[2] + params[3]*np.exp(-t*params[4]) for t in samplingPts])
+
+def residualFunction(params,samplingPts, targetValues): 
+    return targetBloodDecay(params, samplingPts) - targetValues
+
+# Define the gradient with respect to the parameters for a set of ts
+def jacobianOfTarget(params, samplingPts): 
+    return np.array([[1,t,t**2,np.exp(-t*params[4]), -t*params[3]*np.exp(-t*params[4])] for t in samplingPts])
+
+
+theta = np.array([2,0.5, 1, 2.5, 0.5]) # Set of parameters 
+ts = range(0,10)
+ys = targetBloodDecay(theta,ts)
+
+#print(ys)
+#print(jacobianOfTarget(theta,ts))
+#print(approxHessianForLM(theta,ts))
+
+x0 = np.array([1,1,1,1,1])
+nbIter = 50
+omega0 = 10
+
+
+mySndLM = SndOrderLM(lambda x: residualFunction(x, ts, ys), x0, lambda x: jacobianOfTarget(x,ts), nbIter, omega0)
+mySndLM.solve()
+mySndLM.print()
