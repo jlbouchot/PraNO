@@ -1,6 +1,7 @@
 import numpy as np 
 
 from Algos.NumericalAlgos import NumericalAlgos
+from Algos.LinearSystems import GaussSeidelSolver as GSSolver 
 
 __author__ = ["Jean-Luc Bouchot"]
 __copyright__ = "Jean-Luc Bouchot"
@@ -93,7 +94,18 @@ class ClassicalLM(NumericalAlgos):
         xOld = self.x0
         for oneiter in range(0,self.nbIter) : 
             curGradient = self.J(xOld)
-            xNew = xOld - np.dot(np.linalg.pinv(np.matmul(curGradient.transpose(),curGradient) + self.omegas[oneiter]*np.identity(self.d)),np.matmul(curGradient.transpose(),self.residuals[:,oneiter]))
+            # Solving the linear system A x step = b for the step 
+            b_vector = np.matmul(curGradient.transpose(),self.residuals[:,oneiter])
+            A_matrix = np.matmul(curGradient.transpose(),curGradient) + self.omegas[oneiter]*np.identity(self.d)
+            # Create a newSolver with the appropriate values 
+            # linearSolver = GSSolver(A_matrix, np.zeros([self.d]), b_vector, 500)
+            # thisSolver.solve()
+            # linearSolver.solve()
+            # step = thisSolver.xstar
+            # step = linearSolver.xStar
+            step = np.dot(np.linalg.pinv(A_matrix),b_vector)
+            xNew = xOld - step
+            # xNew = xOld - np.dot(np.linalg.pinv(np.matmul(curGradient.transpose(),curGradient) + self.omegas[oneiter]*np.identity(self.d)),np.matmul(curGradient.transpose(),self.residuals[:,oneiter]))
 
             self.errors[oneiter+1] = np.linalg.norm(self.lhs(xNew))
             if self.errors[oneiter+1] > self.errors[oneiter]:
