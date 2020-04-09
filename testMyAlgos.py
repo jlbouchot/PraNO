@@ -1,4 +1,4 @@
-from Algos.FixedPointAlgos.BanachFixedPoint import * 
+from Algos.FixedPointAlgos.BanachFixedPoint import FPAlgo as FPAlgo
 from Algos.OptimisationAlgos.GradientDescent import VanillaGD as VGD
 from Algos.OptimisationAlgos.GradientDescent import ArmijoGoldsteinGD as AGGD
 from Algos.RootFindingAlgos.NewtonsMethod import NewtonsIterations1D as Newton1D
@@ -127,15 +127,6 @@ print("Norm of the error for Jacobi solver is {}".format(np.linalg.norm(myJacobi
 ## Test Gauss Seidel iterations for solving square linear systems
 ##########################################
 
-## define a square matrix with non 0 diagonal entries 
-#matSize = 50
-#aMatrixForJacobi = 0.5*np.random.randn(matSize,matSize)
-## MAke it likely diagonal dominant
-#aMatrixForJacobi = aMatrixForJacobi + np.diag(0.5*np.random.randn(matSize)+matSize/2)
-## Define a right hand side
-#trueSolution = np.ones(matSize)
-#b_rhs = np.matmul(aMatrixForJacobi,trueSolution)
-
 ## Create the solver 
 #x0Jacobi = np.random.rand(matSize)
 #nbIterJacobi = 50
@@ -217,14 +208,14 @@ myVanillaLevenberg.print()
 ## i.e. only need to specify the jacobian and the parametrized residual
 ##########################################
 # Target function is defined f(t) = x1 +tx2 + t^2x3 + x4e^{-tx5}
-def targetBloodDecay(params, samplingPts): 
+def targetBloodDecayClassicalLM(params, samplingPts): 
     return np.array([params[0] + t*params[1] + t**2*params[2] + params[3]*np.exp(-t*params[4]) for t in samplingPts])
 
-def residualFunction(params,samplingPts, targetValues): 
-    return targetBloodDecay(params, samplingPts) - targetValues
+def residualFunctionClassicalLM(params,samplingPts, targetValues): 
+    return targetBloodDecayClassicalLM(params, samplingPts) - targetValues
 
 # Define the gradient with respect to the parameters for a set of ts
-def jacobianOfTarget(params, samplingPts): 
+def jacobianOfTargetClassicalLM(params, samplingPts): 
     return np.array([[1,t,t**2,np.exp(-t*params[4]), -t*params[3]*np.exp(-t*params[4])] for t in samplingPts])
 
 
@@ -232,16 +223,12 @@ theta = np.array([2,0.5, 1, 2.5, 0.5]) # Set of parameters
 ts = range(0,10)
 ys = targetBloodDecay(theta,ts)
 
-#print(ys)
-#print(jacobianOfTarget(theta,ts))
-#print(approxHessianForLM(theta,ts))
-
 x0 = np.array([1,1,1,1,1])
-nbIter = 50
+nbIter = 100
 omega0 = 10
 
 
-myClassicalLM = ClassicalLM(lambda x: residualFunction(x, ts, ys), x0, lambda x: jacobianOfTarget(x,ts), nbIter, omega0)
+myClassicalLM = ClassicalLM(lambda x: residualFunctionClassicalLM(x, ts, ys), x0, lambda x: jacobianOfTargetClassicalLM(x,ts), nbIter, omega0)
 myClassicalLM.solve()
 myClassicalLM.print()
 
@@ -250,14 +237,14 @@ myClassicalLM.print()
 ## Tests for parameter estimations in LM in which the diagonal matrices are lifted with a non identity diagonal matrix
 ##########################################
 # Target function is defined f(t) = x1 +tx2 + t^2x3 + x4e^{-tx5}
-def targetBloodDecay(params, samplingPts): 
+def targetBloodDecayNonIdentity(params, samplingPts): 
     return np.array([params[0] + t*params[1] + t**2*params[2] + params[3]*np.exp(-t*params[4]) for t in samplingPts])
 
-def residualFunction(params,samplingPts, targetValues): 
+def residualFunctionNonIdentity(params,samplingPts, targetValues): 
     return targetBloodDecay(params, samplingPts) - targetValues
 
 # Define the gradient with respect to the parameters for a set of ts
-def jacobianOfTarget(params, samplingPts): 
+def jacobianOfTargetNonIdentity(params, samplingPts): 
     return np.array([[1,t,t**2,np.exp(-t*params[4]), -t*params[3]*np.exp(-t*params[4])] for t in samplingPts])
 
 
@@ -274,6 +261,6 @@ nbIter = 50
 omega0 = 10
 
 
-mySndLM = SndOrderLM(lambda x: residualFunction(x, ts, ys), x0, lambda x: jacobianOfTarget(x,ts), nbIter, omega0)
+mySndLM = SndOrderLM(lambda x: residualFunctionNonIdentity(x, ts, ys), x0, lambda x: jacobianOfTargetNonIdentity(x,ts), nbIter, omega0)
 mySndLM.solve()
 mySndLM.print()
