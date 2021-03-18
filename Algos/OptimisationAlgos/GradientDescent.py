@@ -64,7 +64,7 @@ class ArmijoGoldsteinGD(GradientDescentAlgos):
         self.errors = np.zeros(nbIter+1)
         self.errors[0] = anOperator(x0)
 
-        self.algoName = "GD Arkijo-Goldstein line search"
+        self.algoName = "GD Armijo-Goldstein line search"
 
         self.innerIterMax = 20
 

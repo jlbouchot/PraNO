@@ -12,6 +12,7 @@ __lastmodified__ = "2020/04/06"
 __all__ = [
     'GradientDescent', 
     'NewtonsIterations', 
+    'QNewtonIterations', 
     'LMA'
 ]
 
@@ -20,4 +21,5 @@ eps = np.finfo(float).eps
 
 from .GradientDescent import *
 from .NewtonsIterations import *
+from .QNewtonIterations import *
 from .LMA import *
