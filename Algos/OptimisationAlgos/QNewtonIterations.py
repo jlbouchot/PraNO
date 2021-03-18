@@ -51,10 +51,11 @@ class QNewtonOptim(QNewtonType):
 
     def solve(self): 
     
-        def backtrack(alpha, rho, func, xk, pk): # This should be in a separate class to make sure it is usable to other algorithms 
+        def backtrack(alpha, rho, func, xk, pk, grad0): # This should be in a separate class to make sure it is usable to other algorithms 
             x1 = xk+alpha*pk
             f_at_0 = func(xk)
-            while(func(x1) >= f_at_0 and alpha > 0.01): 
+            g_decrease = 0.01*np.matmul(grad0,pk)
+            while(func(x1) >= f_at_0 + g_decrease and alpha > 0.005): 
                 alpha *= rho 
                 x1 = xk+alpha*pk
             return alpha
@@ -65,8 +66,8 @@ class QNewtonOptim(QNewtonType):
         p0 = -np.matmul(self.B,grad0)
         
         # Proceed with the first iteration to get started 
-        # alpha =  backtrack(1, 0.95, self.lhs, x0, p0)
-        alpha = 0.001
+        # alpha =  backtrack(1, 0.95, self.lhs, x0, p0, grad0)
+        alpha = 0.0001
         x1 = x0 + alpha*p0
         grad1 = self.J(x1)
         self.update(x0,x1,grad0,grad1)
@@ -81,10 +82,10 @@ class QNewtonOptim(QNewtonType):
             p0 = -np.matmul(self.B,grad0)
             
             # Ensure Wolfe conditions 
-            alpha = backtrack(0.5 + nbIter/2/self.nbIter, 0.95, self.lhs, x0, p0)
+            #alpha = backtrack(0.5 + nbIter/self.nbIter, 0.95, self.lhs, x0, p0, grad0)
+            alpha = backtrack(1, 0.5 + nbIter/3/self.nbIter, self.lhs, x0, p0, grad0)
             x1 = x0 + alpha*p0 
             grad1 = self.J(x1)
-            print("x1 = {} and x0 = {}".format(x1,x0))
             
             # Update the inverse Hessian 
             self.update(x0,x1,grad0,grad1)
