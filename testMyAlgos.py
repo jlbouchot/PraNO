@@ -10,6 +10,8 @@ from Algos.OptimisationAlgos.LMA import VanillaLM as VanillaLM
 from Algos.OptimisationAlgos.LMA import ClassicalLM as ClassicalLM
 from Algos.OptimisationAlgos.LMA import SndOrderLM as SndOrderLM
 
+from Algos.OptimisationAlgos.QNewtonIterations import QNewtonOptim as QNewtonOptim
+
 
 import numpy as np 
 import matplotlib.pyplot as plt
@@ -264,3 +266,64 @@ omega0 = 10
 mySndLM = SndOrderLM(lambda x: residualFunctionNonIdentity(x, ts, ys), x0, lambda x: jacobianOfTargetNonIdentity(x,ts), nbIter, omega0)
 mySndLM.solve()
 mySndLM.print()
+
+
+##########################################
+## Tests for BFGS with the Rosenbrock function 
+##########################################
+
+def rosenbrock(x):
+    """The Rosenbrock function"""
+    return sum(100.0*(x[1:]-x[:-1]**2.0)**2.0 + (1-x[:-1])**2.0)
+    
+def rosenbrock_der(x):
+    xm = x[1:-1]
+    xm_m1 = x[:-2]
+    xm_p1 = x[2:]
+    der = np.zeros_like(x)
+    der[1:-1] = 200*(xm-xm_m1**2) - 400*(xm_p1 - xm**2)*xm - 2*(1-xm)
+    der[0] = -400*x[0]*(x[1]-x[0]**2) - 2*(1-x[0])
+    der[-1] = 200*(x[-1]-x[-2]**2)
+    return der
+
+x0 = np.array([1.3, 0.7, 0.8, 1.9, 1.2, 1.1, 1.1, 1.5])
+
+myBFGS = QNewtonOptim(rosenbrock, x0, rosenbrock_der, Hinv_at0 = None, update_type = 'BFGS', nbIter = 50000, tol = 1e-8)
+myBFGS.solve()
+
+def rosenbrock_hessian(x):
+    x = np.asarray(x)
+    H = np.diag(-400*x[:-1],1) - np.diag(400*x[:-1],-1)
+    diagonal = np.zeros_like(x)
+    diagonal[0] = 1200*x[0]**2-400*x[1]+2
+    diagonal[-1] = 200
+    diagonal[1:-1] = 202 + 1200*x[1:-1]**2 - 400*x[2:]
+    H = H + np.diag(diagonal)
+    return H
+
+myNewtonOptim = NewtonOptim(rosenbrock, x0, rosenbrock_der, rosenbrock_hessian, nbIter=5000)
+myNewtonOptim.solve()
+myNewtonOptim.print()
+
+Q = np.array([[2,1], [1,20]])
+b = np.array([10,1])
+c = -3
+twoDfun = lambda x: np.matmul(x, np.matmul(Q,x)) + np.matmul(x,b)+c
+twoD_j = lambda x: 2*np.matmul(Q,x) + b
+
+myBFGS = QNewtonOptim(twoDfun, np.array([1,2]), twoD_j, Hinv_at0 = None, update_type = 'BFGS', nbIter = 50000, tol = 1e-8)
+myBFGS.solve()
+
+
+np.random.seed(0)
+K = np.random.normal(size=(100, 100))
+
+def f(x):
+    return np.sum((np.dot(K, x - 1))**2) + np.sum(x**2)**2
+    
+def grad_f(x): 
+    return 2*np.dot(np.matmul(K.transpose(), K), x- np.ones_like(x)) + 2*x
+    
+yab = QNewtonOptim(f, np.random.rand(100), grad_f, Hinv_at0 = None, update_type = 'BFGS', nbIter = 50000, tol = 1e-8)
+yab.solve()
+print(np.dot(np.matmul(np.linalg.inv(np.matmul(K.transpose(),K) + np.eye(100) ), np.matmul(K.transpose(),K) ), np.ones(100) ))
